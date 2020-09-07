@@ -245,6 +245,11 @@ impl <'a, 'b> Default for GameDataBuilder<'a, 'b> {
 
 impl<'a, 'b> GameDataBuilder<'a, 'b> {
     /// Creates a new GameDataBuilder.
+    ///
+    /// # Returns
+    ///
+    /// A new [GameDataBuilder](struct.GameDataBuilder.html)
+    /// with no base operations or dispatch builders.
     pub fn new() -> Self {
         GameDataBuilder {
             base_builder: DispatcherBuilder::new(),
@@ -252,9 +257,36 @@ impl<'a, 'b> GameDataBuilder<'a, 'b> {
             dispatch_builders: vec![]
         }
     }
-    /// Appends a system to base dispatcher.
+    /// Adds a single system to the base dispatch group.
     ///
-    /// The appended system will always run.
+    /// __Note:__ all dependencies must be added before you add the system.
+    ///
+    /// # Parameters
+    ///
+    /// - `system`: The system that is to be added to the game loop.
+    /// - `name`: A unique string to identify the system by. This is used for
+    ///         dependency tracking. This name may be empty `""` string in which
+    ///         case it cannot be referenced as a dependency.
+    /// - `dependencies`: A list of named system that _must_ have completed running
+    ///                 before this system is permitted to run.
+    ///                 This may be an empty list if there are no dependencies.
+    ///
+    /// # Returns
+    ///
+    /// This function returns the [GameDataBuilder](struct.GameDataBuilder.html) after it has modified it.
+    ///
+    /// # Type Parameters
+    ///
+    /// - `S`: A type that implements the `System` trait.
+    /// - `N`: A type that can be converted into String and can be cloned.
+    ///
+    /// # Panics
+    ///
+    /// If two system are added that share an identical name, this function will panic.
+    /// Empty names are permitted, and this function will not panic if more then two are added.
+    ///
+    /// If a dependency is referenced (by name), but has not previously been added this
+    /// function will panic.
     #[allow(unused)]
     pub fn with_system<S,N>(mut self, system: S, name: N, dependencies: &[N]) -> Self
         where
@@ -268,6 +300,19 @@ impl<'a, 'b> GameDataBuilder<'a, 'b> {
     /// Appends a bundle to the base dispatcher.
     ///
     /// The systems in the bundle will always run.
+    ///
+    /// # Parameters
+    ///
+    /// - `bundle`: The bundle to add.
+    ///
+    /// # Returns
+    ///
+    /// This function returns [GameDataBuilder](struct.GameDataBuilder.html) after it has modified it,
+    /// wrapped in a `Result`.
+    ///
+    /// # Type Parameters
+    ///
+    /// - `B`: A type that implements the `SystemBundle` trait.
     pub fn with_bundle<B>(mut self, bundle: B) -> Result<Self, Error>
         where
             B: SystemBundle<'a, 'b> + 'static,
@@ -276,10 +321,20 @@ impl<'a, 'b> GameDataBuilder<'a, 'b> {
             .push(Box::new(AddBundle { bundle }));
         Ok(self)
     }
-    /// Appends a dispatch group builder to the game data builder.
+    /// Appends a dispatch builder to the game data builder.
     ///
     /// These systems can be turned on or off by parameters
     /// to the GameData's `update` call.
+    ///
+    /// # Parameters
+    ///
+    /// - `name`: The name of the dispatch group builder.
+    /// - `dispatch_builder`: The dispatcher builder.
+    ///
+    /// # Returns
+    ///
+    /// This function returns [GameDataBuilder](struct.GameDataBuilder.html) after it has modified it,
+    /// wrapped in a `Result`.
     #[allow(unused)]
     pub fn add_dispatch_builder(mut self, name: &'a str, dispatch_builder: DispatcherBuilder<'a, 'b>) -> Self {
         self.dispatch_builders.push(
@@ -291,7 +346,16 @@ impl<'a, 'b> GameDataBuilder<'a, 'b> {
         );
         self
     }
-    /// Adds a dispatch group to the system description.
+    /// Adds a dispatch group builder to the game data builder.
+    ///
+    /// # Parameters
+    ///
+    /// - `dispatch_group_builder`: The initialized dispatch group builder to add.
+    ///
+    /// # Returns
+    ///
+    /// This function returns [GameDataBuilder](struct.GameDataBuilder.html) after it has modified it,
+    /// wrapped in a `Result`.
     #[allow(dead_code)]
     pub fn with_dispatch_group(mut self, dispatch_group_builder: DispatchGroupBuilder<'a, 'b>) -> Result<Self, Error> {
         self.dispatch_builders.push(dispatch_group_builder);
@@ -353,6 +417,25 @@ impl<'a, 'b>DataInit<GameData<'a, 'b>> for GameDataBuilder<'a, 'b> {
 /// Builds a system add request.
 ///
 /// Code copied from `amethyst_core/src/deferred_dispatcher_operation.rs`.
+///
+/// # Parameters
+///
+/// - `system`: The system that is to be added to the game loop.
+/// - `name`: A unique string to identify the system by. This is used for
+///         dependency tracking. This name may be empty `""` string in which
+///         case it cannot be referenced as a dependency.
+/// - `dependencies`: A list of named system that _must_ have completed running
+///                 before this system is permitted to run.
+///                 This may be an empty list if there are no dependencies.
+///
+/// # Returns
+///
+/// This function returns [DispatchGroupBuilder](struct.DispatchGroupBuilder.html) after it has modified it.
+///
+/// # Type Parameters
+///
+/// - `S`: A type that implements the `System` trait.
+/// - `N`: A type that can be converted into String and can be cloned.
 #[allow(unused)]
 fn make_dispatcher_operation<'a, 'b, S, N>(system: S, name: N, dependencies: &[N]) -> Box<dyn DispatcherOperation<'a, 'b> + 'static>
     where
