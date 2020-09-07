@@ -5,7 +5,7 @@ authors = ["trsolutions <thomas_odell@trsolutions.biz>"]
 edition = "2018"
 
 [features]
-default = [ ]
+default = ["metal"] # TEMPORARY! REMOVE BEFORE PUSHING!
 
 vulkan = ["amethyst/vulkan"]
 metal = ["amethyst/metal"]
@@ -16,5 +16,8 @@ empty = ["amethyst/empty"]
 [dependencies]
 amethyst = "0.15"
 log = { version = "0.4.8", features = ["serde"] }
+lazy_static = "*"
+serde = "*"
+serde_derive = "*"
 amethyst-rhusics = { git = "https://github.com/trsoluti/amethyst-rhusics.git" }
 cgmath = "0.17"
