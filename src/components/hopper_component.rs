@@ -56,13 +56,16 @@ impl HopperState {
 /// The ninja state
 #[derive(Default, Debug, Copy, Clone)]
 pub struct HopperComponent {
+    /// The current state of the hopper.
     pub hopper_state: HopperState,
+    /// The current amount of nudge (left/right) force.
     pub nudge_force: f32,
+    /// The current amount of jump force.
     pub jump_force: f32,
 }
 
 impl HopperComponent {
-    /// Returns true if the hopper is not bouncing/resting on the roof.
+    /// Returns true if the hopper is not bouncing off / resting on a roof.
     #[inline]
     pub fn is_soaring(&self) -> bool { self.hopper_state.is_soaring() }
     #[inline]
