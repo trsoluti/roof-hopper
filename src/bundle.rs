@@ -2,10 +2,11 @@
 //!
 //! The following amethyst-rhusics systems are added:
 //!
-//! - `CurrentFrameUpdateSystem`: updates positions and velocities for the current frame, based on `NextFrame` values.
-//! - `NextFrameSetupSystem`: sets up next-frame positions and velocities.
+//! - `CurrentFrameUpdateSystem`: updates positions and velocities for the current frame,
+//!         based on the previous pass's `NextFrame` values.
+//! - `NextFrameSetupSystem`: sets up next-frame positions and velocities for use in the next pass.
 //! - `PoseTransformSyncSystem`: copies transform information from `BodyPose` in rhusics into `Transform`
-//!                              in amethyst
+//!                              in amethyst.
 //!
 //! Note we use the 2D version of each system.
 //!

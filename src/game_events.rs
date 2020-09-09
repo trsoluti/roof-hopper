@@ -15,7 +15,6 @@ use amethyst::core::shrev::EventChannel;
 use amethyst::derive::EventReader;
 use amethyst::ecs::{Read, SystemData};
 use amethyst::winit::Event;
-use amethyst::SimpleState;
 
 /// The different types of events handled by our
 /// Game State

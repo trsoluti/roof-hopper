@@ -8,5 +8,5 @@ use crate::game_events::{HopperGameStateEvent, HopperGameStateEventReader};
 ///
 /// # Type Parameters
 ///
-/// - `T`: `State`
+/// - `T`: The type of our initial state, which complies to the `State` trait.
 pub type RoofHopperApplication<'a, T> = CoreApplication<'a, T, HopperGameStateEvent, HopperGameStateEventReader>;

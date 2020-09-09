@@ -26,6 +26,8 @@ use amethyst::renderer::{RenderingBundle, RenderToWindow, RenderFlat2D};
 use amethyst::renderer::types::DefaultBackend;
 use crate::game_data::DispatchGroupBuilder;
 use crate::bundle::GameBundle;
+use crate::application::RoofHopperApplication;
+use crate::states::HopperLoadingState;
 
 // Components of a standard Amethyst game, broken into modules:
 mod application; // The definition of the Amethyst application
@@ -74,7 +76,13 @@ fn main() -> amethyst::Result<()> {
                 .with_bundle(GameBundle)?
         )?
         ;
+    let mut game = RoofHopperApplication::new(
+        resources,
+        HopperLoadingState::default(),
+        game_data,
+    )?;
 
+    game.run();
 
     Ok(())
 }

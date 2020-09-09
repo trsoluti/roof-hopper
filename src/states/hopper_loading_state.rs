@@ -1,11 +1,16 @@
 //! The loading state for the game
 
-use amethyst::{assets::{ProgressCounter, Completion}, ecs::Entity, input::{is_close_requested, is_key_down, VirtualKeyCode}, State, StateData, Trans};
+use amethyst::{assets::{ProgressCounter, Completion}, input::{is_close_requested, is_key_down, VirtualKeyCode}, State, StateData, Trans};
 use crate::{
     game_data::GameData,
     game_events::HopperGameStateEvent,
 };
 use crate::states::HopperGameState;
+use crate::resources::insert_resources;
+use crate::resources::insert_player_entity_resources;
+use crate::components::register_components;
+use crate::entities::load_entities;
+use crate::entities::rooftop_entity::draw_rooftop_path;
 
 /// The state which manages the loading of all the entities.
 #[derive(Default)]
@@ -17,6 +22,14 @@ pub struct HopperLoadingState {
 impl<'a, 'b> State<GameData<'a, 'b>, HopperGameStateEvent> for HopperLoadingState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
+        insert_resources(world, &mut self.progress);
+        register_components(world);
+        let (_background, camera, hopper, _rooftop) = load_entities(
+            world,
+            &mut self.progress,
+        );
+        insert_player_entity_resources(world, hopper, camera);
+        draw_rooftop_path(world);
     }
 
     fn handle_event(

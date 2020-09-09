@@ -18,7 +18,7 @@ use amethyst_rhusics::rhusics_core::{CollisionMode, Pose, PhysicalEntity};
 use amethyst_rhusics::collision::primitive::Rectangle;
 use cgmath::{Point2, One};
 use cgmath::Basis2;
-use amethyst_rhusics::rhusics_core::physics2d::{Mass2, Velocity2};
+use amethyst_rhusics::rhusics_core::physics2d::{Mass2};
 use crate::components::RooftopComponent;
 use crate::resources::RooftopSpriteResource;
 
