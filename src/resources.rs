@@ -40,7 +40,7 @@ pub fn insert_resources(world: &mut World, progress: &mut ProgressCounter) {
 ///
 /// `world`: The ECS `World` for this application.
 /// `entity`: The `Entity` (ID) of the player entity.
-pub fn insert_player_entity_resources(world: &mut World, player_entity: Entity, main_camera_entity: Entity) {
+pub fn insert_entity_resources(world: &mut World, player_entity: Entity, main_camera_entity: Entity) {
     world.insert(MainCameraEntityResource { main_camera_entity });
     world.insert(PlayerEntityResource{ player_entity } );
 }

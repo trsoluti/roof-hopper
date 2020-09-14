@@ -19,7 +19,7 @@ use amethyst_rhusics::collision::primitive::Rectangle;
 use cgmath::{Point2, One};
 use cgmath::Basis2;
 use amethyst_rhusics::rhusics_core::physics2d::{Mass2};
-use crate::components::RooftopComponent;
+use crate::components::{RooftopComponent, CollisionComponent};
 use crate::resources::RooftopSpriteResource;
 
 // These values were created from analysis of the
@@ -95,6 +95,7 @@ pub fn create_rooftop_entity(
         .with(sprite)
         .with(transform)
         .with(RooftopComponent::default().with_collision_enabled(enabled))
+        .with(CollisionComponent::default())
         .with_static_physical_entity(
             CollisionShape2::<f32, BodyPose2<f32>, ()>::new_simple(
                 CollisionStrategy::FullResolution,

@@ -44,7 +44,8 @@ pub fn load_entities(
         &screen_dimensions,
     );
     let camera_entity = camera_entity::initialise_camera(world, &screen_dimensions);
-    (background_entity, camera_entity, hopper_entity, background_entity)
+    let rooftop_entity = rooftop_entity::load_rooftop_entity(world, progress, &screen_dimensions);
+    (background_entity, camera_entity, hopper_entity, rooftop_entity)
 }
 
 /// Starts off the loading of a sprite.

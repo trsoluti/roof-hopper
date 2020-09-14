@@ -8,7 +8,7 @@ use amethyst::ecs::Entity;
 use amethyst::core::Transform;
 use crate::entities::load_sprite;
 use amethyst::window::ScreenDimensions;
-use crate::components::HopperComponent;
+use crate::components::{HopperComponent, CollisionComponent};
 use amethyst_rhusics::rhusics_ecs::WithPhysics;
 use amethyst_rhusics::rhusics_core::collide2d::{CollisionShape2, BodyPose2};
 use amethyst_rhusics::collision::CollisionStrategy;
@@ -41,6 +41,7 @@ pub fn load_hopper_entity(world: &mut World, progress: &mut ProgressCounter, scr
     world.create_entity()
         .with(sprite)
         .with(HopperComponent::default())
+        .with(CollisionComponent::default())
         .with(transform)
         .with_dynamic_physical_entity(
             CollisionShape2::<f32, BodyPose2<f32>, ()>::new_simple(

@@ -5,10 +5,13 @@ use amethyst::prelude::{World, WorldExt};
 mod hopper_component;
 mod rooftop_component;
 mod background_component;
+mod collision_component;
 
 pub use hopper_component::{ HopperComponent, HopperState };
 pub use rooftop_component::RooftopComponent;
 pub use background_component::BackgroundComponent;
+pub use collision_component::CollisionComponent;
+use cgmath::BaseNum;
 
 
 /// Registers all our custom component types with world to avoid
@@ -21,4 +24,5 @@ pub fn register_components(world: &mut World) {
     world.register::<HopperComponent>();
     world.register::<RooftopComponent>();
     world.register::<BackgroundComponent>();
+    world.register::<CollisionComponent>();
 }

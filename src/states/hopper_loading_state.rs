@@ -7,7 +7,7 @@ use crate::{
 };
 use crate::states::HopperGameState;
 use crate::resources::insert_resources;
-use crate::resources::insert_player_entity_resources;
+use crate::resources::insert_entity_resources;
 use crate::components::register_components;
 use crate::entities::load_entities;
 use crate::entities::rooftop_entity::draw_rooftop_path;
@@ -23,12 +23,12 @@ impl<'a, 'b> State<GameData<'a, 'b>, HopperGameStateEvent> for HopperLoadingStat
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
         insert_resources(world, &mut self.progress);
-        register_components(world);
+        register_components(world); // f32 is passed to collision component.
         let (_background, camera, hopper, _rooftop) = load_entities(
             world,
             &mut self.progress,
         );
-        insert_player_entity_resources(world, hopper, camera);
+        insert_entity_resources(world, hopper, camera);
         draw_rooftop_path(world);
     }
 
