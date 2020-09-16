@@ -5,7 +5,6 @@
 //! through events. This system converts it into a
 //! state variable, either in collision or not in collision
 
-use cgmath::BaseNum;
 use std::fmt::Debug;
 use amethyst_rhusics::rhusics_ecs::collide2d::ContactEvent2;
 use amethyst::core::ecs::Component;

@@ -7,6 +7,7 @@ use amethyst::core::ecs::Entity;
 ///
 /// It is a resource rather than a field in the state
 /// to allow systems to access it more easily.
+#[derive(Copy, Clone, Debug)]
 pub struct PlayerEntityResource {
     pub player_entity: Entity
 }

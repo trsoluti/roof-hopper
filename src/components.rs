@@ -11,7 +11,6 @@ pub use hopper_component::{ HopperComponent, HopperState };
 pub use rooftop_component::RooftopComponent;
 pub use background_component::BackgroundComponent;
 pub use collision_component::CollisionComponent;
-use cgmath::BaseNum;
 
 
 /// Registers all our custom component types with world to avoid

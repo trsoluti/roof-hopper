@@ -2,9 +2,8 @@
 //! based on the entity's velocity.
 
 use amethyst::derive::SystemDesc;
-use amethyst::core::ecs::{World, System, Read, WriteStorage, Join, SystemData, ReadStorage};
-use amethyst::core::ecs::shrev::EventChannel;
-use crate::components::{CollisionComponent, HopperComponent, HopperState};
+use amethyst::core::ecs::{System, WriteStorage, Join, SystemData, ReadStorage};
+use crate::components::{HopperComponent, HopperState};
 use amethyst_rhusics::rhusics_core::physics2d::Velocity2;
 use amethyst_rhusics::rhusics_core::NextFrame;
 

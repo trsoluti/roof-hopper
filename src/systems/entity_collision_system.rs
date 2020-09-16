@@ -48,7 +48,7 @@ impl<'a> System<'a> for EntityCollisionSystem {
                 // to see if it has an attached collision component
                 [contact.bodies.0, contact.bodies.1].iter().for_each(|&body| {
                     if let Some(collision_component) = collision_components.get_mut(body) {
-                        log::info!("Entity {:?} is in collision.", body);
+                        //+log::info!("Entity {:?} is in collision.", body);
                         collision_component.contact_event = Some(contact.clone())
                     }
                 })

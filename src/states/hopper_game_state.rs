@@ -6,9 +6,12 @@ use amethyst::core::Transform;
 use amethyst::core::ecs::Join;
 use crate::game_data::GameData;
 use crate::game_events::HopperGameStateEvent;
-use amethyst::input::{is_close_requested, is_key_down};
+use amethyst::input::{is_close_requested, is_key_down, get_key};
 use amethyst::winit::VirtualKeyCode;
 use amethyst_rhusics::time_sync;
+use crate::resources::PlayerEntityResource;
+use crate::components::HopperComponent;
+use amethyst::renderer::rendy::wsi::winit::ElementState;
 
 /// Identifies that the object with this transform
 /// is "hidden" behind the camera and can be
@@ -44,6 +47,29 @@ impl<'a, 'b> State<GameData<'a, 'b>, HopperGameStateEvent> for HopperGameState {
             // Check if the window should be closed
             if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
                 return Trans::Quit;
+            }
+            // Look for our key events
+            if let Some((keycode, state)) = get_key(&event) {
+                if [VirtualKeyCode::A,
+                    VirtualKeyCode::Left,
+                    VirtualKeyCode::D,
+                    VirtualKeyCode::Right,
+                    VirtualKeyCode::X,
+                    VirtualKeyCode::Space,
+                ].contains(&keycode) && state == ElementState::Pressed {
+                    let player_entity = data.world.read_resource::<PlayerEntityResource>().player_entity;
+                    if let Some(hopper_component) = data.world.write_storage::<HopperComponent>().get_mut(player_entity) {
+                        if keycode == VirtualKeyCode::X || keycode == VirtualKeyCode::Space && hopper_component.can_jump() {
+                            hopper_component.start_jump()
+                        }
+                        else if keycode == VirtualKeyCode::A || keycode == VirtualKeyCode::Left && hopper_component.can_nudge() {
+                            hopper_component.start_nudge(true)
+                        }
+                        else if keycode == VirtualKeyCode::D || keycode == VirtualKeyCode::Right && hopper_component.can_nudge() {
+                            hopper_component.start_nudge(false)
+                        }
+                    }
+                }
             }
         }
         Trans::None
