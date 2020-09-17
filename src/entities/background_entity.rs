@@ -11,6 +11,7 @@ use amethyst::core::math::Vector3;
 use crate::entities::load_sprite;
 use amethyst::window::ScreenDimensions;
 use crate::components::BackgroundComponent;
+use crate::config::GAME_CONFIGURATION;
 
 /// Loads the background picture as an entity.
 ///
@@ -26,8 +27,14 @@ use crate::components::BackgroundComponent;
 /// The created (but not yet loaded) background entity.
 pub fn load_background_entity(world: &mut World, progress: &mut ProgressCounter, screen_dimensions: &ScreenDimensions) -> Entity {
     let mut transform = Transform::default();
-    transform.set_translation_xyz(screen_dimensions.width() * 0., screen_dimensions.height() * 0.5, -1.);
-    transform.set_scale(Vector3::new(3., 3., 3.));
+    transform.set_translation_xyz(
+        screen_dimensions.width() * GAME_CONFIGURATION.background_rel_x_position,
+        screen_dimensions.height() * GAME_CONFIGURATION.background_rel_y_position,
+        GAME_CONFIGURATION.background_z_position);
+    transform.set_scale(
+        Vector3::new(1., 1., 1.) * GAME_CONFIGURATION.background_scale
+    );
+    log::info!("Background transform set to {:?}", transform);
     let sprite = load_sprite(world, "background", progress);
     world.create_entity()
         .with(sprite)

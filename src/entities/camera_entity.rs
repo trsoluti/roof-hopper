@@ -5,6 +5,7 @@ use amethyst::window::ScreenDimensions;
 use amethyst::core::Transform;
 use amethyst::renderer::Camera;
 use amethyst::ecs::Entity;
+use crate::config::GAME_CONFIGURATION;
 
 /// Initialises the camera entity.
 ///
@@ -22,7 +23,10 @@ pub fn initialise_camera(world: &mut World, dimensions: &ScreenDimensions) -> En
     // Center the camera in the middle of the screen, and let it cover
     // the entire screen
     let mut transform = Transform::default();
-    transform.set_translation_xyz(dimensions.width() * 0.5, dimensions.height() * 0.5, 1.);
+    transform.set_translation_xyz(
+        dimensions.width() * 0.5,
+        dimensions.height() * 0.5,
+        GAME_CONFIGURATION.camera_z_position);
 
     world
         .create_entity()

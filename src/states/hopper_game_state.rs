@@ -12,13 +12,7 @@ use amethyst_rhusics::time_sync;
 use crate::resources::PlayerEntityResource;
 use crate::components::HopperComponent;
 use amethyst::renderer::rendy::wsi::winit::ElementState;
-
-/// Identifies that the object with this transform
-/// is "hidden" behind the camera and can be
-/// exposed.
-const HIDDEN_Z_POSITION: f32 = 1000.;
-const VISIBLE_Z_POSITION: f32 = 0.;
-const GRAVITY_ACCELERATION: f32 = -9.8;
+use crate::config::GAME_CONFIGURATION;
 
 /// The state that manages the running of the game
 #[derive(Default)]
@@ -109,8 +103,8 @@ impl HopperGameState {
     fn make_sprites_visible(&self, world: &mut World) {
         let mut transforms = world.write_storage::<Transform>();
         for transform in (&mut transforms).join() {
-            if transform.translation().z == HIDDEN_Z_POSITION {
-                transform.set_translation_z(VISIBLE_Z_POSITION);
+            if transform.translation().z == GAME_CONFIGURATION.hidden_z_position {
+                transform.set_translation_z(GAME_CONFIGURATION.visible_z_position);
             }
         }
     }
@@ -127,6 +121,10 @@ impl HopperGameState {
         type MyWorldParameters = WorldParameters<<Point2<f32> as EuclideanSpace>::Diff, <Point2<f32> as EuclideanSpace>::Scalar>;
 
         let mut world_parameters = world.write_resource::<MyWorldParameters>();
-        *world_parameters = MyWorldParameters::new(Vector2::new(0.0, GRAVITY_ACCELERATION));
+        *world_parameters = MyWorldParameters::new(
+            Vector2::new(
+                0.0,
+                GAME_CONFIGURATION.gravity_acceleration,
+            ));
     }
 }

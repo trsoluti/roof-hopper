@@ -21,18 +21,7 @@ use cgmath::Basis2;
 use amethyst_rhusics::rhusics_core::physics2d::{Mass2};
 use crate::components::{RooftopComponent, CollisionComponent};
 use crate::resources::RooftopSpriteResource;
-
-// These values were created from analysis of the
-// sprite. The rectangle is 101 x 171 but the visible part is
-// only 101 x 81.
-//
-// Theoretically, the offset should then be (171-81)/2
-//
-// But in practice this is too much. /4 works, not sure why.
-const ROOFTOP_COLLISION_RECTANGLE_WIDTH: f32 = 101.;
-const ROOFTOP_COLLISION_RECTANGLE_HEIGHT: f32 = 81.;
-const ROOFTOP_COLLISION_RECTANGLE_OFFSET_X: f32 = 0.;
-const ROOFTOP_COLLISION_RECTANGLE_OFFSET_Y: f32 = -(171.-81.)/4.;
+use crate::config::GAME_CONFIGURATION;
 
 /// Creates an entity using the (preloaded) system resource
 /// for the rooftop sprite,
@@ -107,12 +96,13 @@ pub fn create_rooftop_entity(
                 CollisionStrategy::FullResolution,
                 CollisionMode::Discrete,
                 Rectangle::new(
-                ROOFTOP_COLLISION_RECTANGLE_WIDTH,
-                ROOFTOP_COLLISION_RECTANGLE_HEIGHT).into(),
+                GAME_CONFIGURATION.rooftop_collision_rectangle_width,
+                GAME_CONFIGURATION.rooftop_collision_rectangle_height
+                ).into(),
                 BodyPose2::<f32>::new(
                     Point2::new(
-                        ROOFTOP_COLLISION_RECTANGLE_OFFSET_X,
-                        ROOFTOP_COLLISION_RECTANGLE_OFFSET_Y),
+                        GAME_CONFIGURATION.rooftop_collision_rectangle_offset_x,
+                        GAME_CONFIGURATION.rooftop_collision_rectangle_offset_y),
                     Basis2::one(),
                 ),
             ),

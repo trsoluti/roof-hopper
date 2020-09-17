@@ -8,6 +8,7 @@ use amethyst::prelude::World;
 use amethyst::assets::ProgressCounter;
 use amethyst::ecs::Entity;
 use crate::entities::load_sprite;
+use crate::config::GAME_CONFIGURATION;
 
 mod main_camera_entity_resource;
 mod player_entity_resource;
@@ -27,7 +28,10 @@ pub use rooftop_sprite_resource::RooftopSpriteResource;
 /// `world`: The ECS `World` for this application.
 /// `progress`: A progress counter for keeping track of when the resources were loaded
 pub fn insert_resources(world: &mut World, progress: &mut ProgressCounter) {
-    let rooftop_sprite_render = load_sprite(world, "Roof North", progress);
+    let rooftop_sprite_render = load_sprite(
+        world,
+        &*GAME_CONFIGURATION.rooftop_sprite_name,
+        progress);
     world.insert(RooftopSpriteResource{ rooftop_sprite_render });
 }
 

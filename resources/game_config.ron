@@ -1,0 +1,19 @@
+(
+    /// The amount of gravity in the system.
+    ///
+    /// The units of this are unclear, so the
+    /// default value is figured out by feel.
+    gravity_acceleration: -9.8,
+    /// The z-position of the camera
+    camera_z_position: 1.,
+    /// The z position of invisible sprites
+    ///
+    /// This needs to be behind the camera
+    /// and also a value that will not be
+    /// used for anything other than hiding sprites
+    hidden_z_position: 1000.,
+    /// The default position of visible sprites
+    ///
+    /// This needs to be in front of the camera
+    visible_z_position: 0.,
+)
