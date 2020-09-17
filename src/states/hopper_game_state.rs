@@ -71,6 +71,9 @@ impl<'a, 'b> State<GameData<'a, 'b>, HopperGameStateEvent> for HopperGameState {
                     }
                 }
             }
+        } else if let HopperGameStateEvent::GameEvent(game_event) = &event {
+            log::info!("Got game event {:?}", game_event);
+            return Trans::Quit
         }
         Trans::None
     }

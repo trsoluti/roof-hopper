@@ -25,8 +25,14 @@ use crate::resources::RooftopSpriteResource;
 // These values were created from analysis of the
 // sprite. The rectangle is 101 x 171 but the visible part is
 // only 101 x 81.
-const ROOFTOP_COLLISION_RECTANGLE_WIDTH: f32 = 101./2.;
-const ROOFTOP_COLLISION_RECTANGLE_HEIGHT: f32 = 81./2.;
+//
+// Theoretically, the offset should then be (171-81)/2
+//
+// But in practice this is too much. /4 works, not sure why.
+const ROOFTOP_COLLISION_RECTANGLE_WIDTH: f32 = 101.;
+const ROOFTOP_COLLISION_RECTANGLE_HEIGHT: f32 = 81.;
+const ROOFTOP_COLLISION_RECTANGLE_OFFSET_X: f32 = 0.;
+const ROOFTOP_COLLISION_RECTANGLE_OFFSET_Y: f32 = -(171.-81.)/4.;
 
 /// Creates an entity using the (preloaded) system resource
 /// for the rooftop sprite,
@@ -97,12 +103,18 @@ pub fn create_rooftop_entity(
         .with(RooftopComponent::default().with_collision_enabled(enabled))
         .with(CollisionComponent::default())
         .with_static_physical_entity(
-            CollisionShape2::<f32, BodyPose2<f32>, ()>::new_simple(
+            CollisionShape2::<f32, BodyPose2<f32>, ()>::new_simple_offset(
                 CollisionStrategy::FullResolution,
                 CollisionMode::Discrete,
                 Rectangle::new(
                 ROOFTOP_COLLISION_RECTANGLE_WIDTH,
-                ROOFTOP_COLLISION_RECTANGLE_HEIGHT).into()
+                ROOFTOP_COLLISION_RECTANGLE_HEIGHT).into(),
+                BodyPose2::<f32>::new(
+                    Point2::new(
+                        ROOFTOP_COLLISION_RECTANGLE_OFFSET_X,
+                        ROOFTOP_COLLISION_RECTANGLE_OFFSET_Y),
+                    Basis2::one(),
+                ),
             ),
             BodyPose2::<f32>::new(
                 Point2::new(x_pos, y_pos),

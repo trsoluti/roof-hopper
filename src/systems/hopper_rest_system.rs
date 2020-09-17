@@ -17,6 +17,9 @@ const DOWNWARD_PRESSURE:f32 = 4.;
 /// This system is necessary because Amethyst-Rhusics
 /// currently has no mechanism to stop the rebound
 /// when two objects collide.
+///
+/// (Actually there is, by changing the parameters
+/// of the Physics Material.)
 #[derive(SystemDesc, Default)]
 pub struct HopperRestSystem;
 

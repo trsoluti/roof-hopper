@@ -3,7 +3,7 @@
 use amethyst::core::ecs::{Component, DenseVecStorage};
 
 /// How hard to jump when the jump button pressed
-const JUMP_FORCE: f32 = 5_000.;
+const JUMP_FORCE: f32 = 5_200.;
 /// How much to force left/right when the appropriate button pressed
 const SIDEWAYS_FORCE: f32 = 80.;
 
