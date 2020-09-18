@@ -8,8 +8,7 @@ use amethyst::core::shrev::EventChannel;
 use crate::game_events::GameEvent;
 use amethyst::window::ScreenDimensions;
 use crate::resources::{PlayerEntityResource, MainCameraEntityResource};
-
-const HOPPER_LOWER_Y_BOUNDARY: f32 = -10.;
+use crate::config::GAME_CONFIGURATION;
 
 /// A system that determines if the hopper has gone out of bounds
 #[derive(SystemDesc, Default)]
@@ -47,13 +46,13 @@ impl <'a> System<'a> for HopperBoundarySystem {
 
         let lower_boundary = camera_y_position
             - screen_dimensions.height() / 2.
-            - HOPPER_LOWER_Y_BOUNDARY;
+            - GAME_CONFIGURATION.hopper_lower_y_boundary;
 
         //+log::info!("Player y pos: {:?}, boundary = {:?} - {:?} - {:?} = {:?}",
         //+    hopper_y_position,
         //+    camera_y_position,
         //+    screen_dimensions.height() / 2.,
-        //+    HOPPER_LOWER_Y_BOUNDARY,
+        //+    GAME_CONFIGURATION.hopper_lower_y_boundary,
         //+    lower_boundary,
         //+);
 

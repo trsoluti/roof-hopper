@@ -7,8 +7,7 @@ use crate::resources::PlayerEntityResource;
 use amethyst_rhusics::rhusics_core::NextFrame;
 use amethyst_rhusics::rhusics_core::physics2d::Velocity2;
 use cgmath::{Vector2};
-
-const DOWNWARD_PRESSURE:f32 = 4.;
+use crate::config::GAME_CONFIGURATION;
 
 /// A system to ensure the hopper stays on the roof
 /// until the user presses Jump,
@@ -49,7 +48,7 @@ impl<'a> System<'a> for HopperRestSystem {
         // if we are in bouncing or resting state and there is no jump force in place.
         if hopper_component.can_jump() && hopper_component.jump_force < f32::EPSILON {
             next_frame_velocity_component.value = Velocity2::new(
-                Vector2::new(0., -DOWNWARD_PRESSURE),
+                Vector2::new(0., -GAME_CONFIGURATION.downward_pressure),
                 0.
             )
         }

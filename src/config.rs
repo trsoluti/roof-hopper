@@ -71,11 +71,39 @@ pub struct GameConfiguration {
     /// The y offset of the rooftop collision rectangle
     #[serde(default="default_rooftop_collision_rectangle_offset_y")]
     pub rooftop_collision_rectangle_offset_y: f32,
-
+    /// How hard to jump when the jump button pressed
+    #[serde(default="default_jump_force")]
+    pub jump_force: f32,
+    /// How much to force left/right when the appropriate button pressed
+    #[serde(default="default_sideways_force")]
+    pub sideways_force: f32,
+    /// How far below the screen the hopper needs to be
+    /// before it is out of bounds
+    #[serde(default="default_hopper_lower_y_boundary")]
+    pub hopper_lower_y_boundary: f32,
+    /// Number of frames to debounce the hopper
+    #[serde(default="default_debouncing_frame_count")]
+    pub debouncing_frame_count: u32,
+    /// Max portion of the jump force per frame
+    #[serde(default="default_max_jump_force_per_frame")]
+    pub max_jump_force_per_frame: f32,
+    /// Max portion of the left/right nudge force per frame
+    #[serde(default="default_max_nudge_force_per_frame")]
+    pub max_nudge_force_per_frame: f32,
+    /// Pressure used to keep hopper on roof
+    #[serde(default="default_downward_pressure")]
+    pub downward_pressure: f32,
+    /// Speed at which hopper transitions between rising, peaking and falling.
+    #[serde(default="default_peaking_threshold")]
+    pub peaking_threshold: f32,
+    /// how far above the roof the hopper needs to be
+    /// before roof collision is enabled.
+    #[serde(default="default_hopper_position_leeway")]
+    pub hopper_position_leeway: f32,
 }
 
 // Default values
-const GRAVITY_ACCELERATION: f32 = -9.8;
+const GRAVITY_ACCELERATION: f32 = -98.;
 const CAMERA_Z_POSITION: f32 = 1.;
 const HIDDEN_Z_POSITION: f32 = 1000.;
 const VISIBLE_Z_POSITION: f32 = 0.;
@@ -97,6 +125,25 @@ const ROOFTOP_COLLISION_RECTANGLE_WIDTH: f32 = 101.;
 const ROOFTOP_COLLISION_RECTANGLE_HEIGHT: f32 = 81.;
 const ROOFTOP_COLLISION_RECTANGLE_OFFSET_X: f32 = 0.;
 const ROOFTOP_COLLISION_RECTANGLE_OFFSET_Y: f32 = -(171.-81.)/4.;
+/// How hard to jump when the jump button pressed
+const JUMP_FORCE: f32 = 16_800.;
+/// How much to force left/right when the appropriate button pressed
+const SIDEWAYS_FORCE: f32 = 1100.;
+// How far below the screen before out of bounds
+const HOPPER_LOWER_Y_BOUNDARY: f32 = -10.;
+// # of frames to bounce
+const DEBOUNCING_FRAME_COUNT: u32 = 5;
+const MAX_JUMP_FORCE_PER_FRAME: f32 = 4000.;
+const MAX_NUDGE_FORCE_PER_FRAME: f32 = 400.;
+// used to keep the hopper from bouncing up.
+const DOWNWARD_PRESSURE:f32 = 4.;
+// to differentiate between rising, peaking and falling
+const PEAKING_THRESHOLD: f32 = 1.2;
+// how far above the roof the hopper needs to be
+// before roof collision is enabled.
+const HOPPER_POSITION_LEEWAY: f32 = 64.; // calculated by eyeballing the hopper
+// (see hopper entity for this value)
+
 
 // fns to load those default values
 // if not present in the .ron file:
@@ -116,6 +163,15 @@ fn default_rooftop_collision_rectangle_width() -> f32 { ROOFTOP_COLLISION_RECTAN
 fn default_rooftop_collision_rectangle_height() -> f32 { ROOFTOP_COLLISION_RECTANGLE_HEIGHT }
 fn default_rooftop_collision_rectangle_offset_x() -> f32 { ROOFTOP_COLLISION_RECTANGLE_OFFSET_X }
 fn default_rooftop_collision_rectangle_offset_y() -> f32 { ROOFTOP_COLLISION_RECTANGLE_OFFSET_Y }
+fn default_jump_force() -> f32 { JUMP_FORCE }
+fn default_sideways_force() -> f32 { SIDEWAYS_FORCE }
+fn default_hopper_lower_y_boundary() -> f32 { HOPPER_LOWER_Y_BOUNDARY }
+fn default_debouncing_frame_count() -> u32 { DEBOUNCING_FRAME_COUNT }
+fn default_max_jump_force_per_frame() -> f32 { MAX_JUMP_FORCE_PER_FRAME }
+fn default_max_nudge_force_per_frame() -> f32 { MAX_NUDGE_FORCE_PER_FRAME }
+fn default_downward_pressure() -> f32 { DOWNWARD_PRESSURE }
+fn default_peaking_threshold() -> f32 { PEAKING_THRESHOLD }
+fn default_hopper_position_leeway() -> f32 { HOPPER_POSITION_LEEWAY }
 
 impl Default for GameConfiguration {
     fn default() -> Self {
@@ -136,6 +192,15 @@ impl Default for GameConfiguration {
             rooftop_collision_rectangle_height: default_rooftop_collision_rectangle_height(),
             rooftop_collision_rectangle_offset_x: default_rooftop_collision_rectangle_offset_x(),
             rooftop_collision_rectangle_offset_y: default_rooftop_collision_rectangle_offset_y(),
+            jump_force: default_jump_force(),
+            sideways_force: default_sideways_force(),
+            hopper_lower_y_boundary: default_hopper_lower_y_boundary(),
+            debouncing_frame_count: default_debouncing_frame_count(),
+            max_jump_force_per_frame: default_max_jump_force_per_frame(),
+            max_nudge_force_per_frame: default_max_nudge_force_per_frame(),
+            downward_pressure: default_downward_pressure(),
+            peaking_threshold: default_peaking_threshold(),
+            hopper_position_leeway: default_hopper_position_leeway(),
         }
     }
 }

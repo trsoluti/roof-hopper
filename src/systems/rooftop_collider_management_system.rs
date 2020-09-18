@@ -8,9 +8,7 @@ use amethyst::core::ecs::{Join, SystemData};
 use amethyst::core::Transform;
 use amethyst_rhusics::rhusics_core::collide2d::{CollisionShape2, BodyPose2};
 use crate::resources::PlayerEntityResource;
-
-const HOPPER_POSITION_LEEWAY: f32 = 64.; // calculated by eyeballing the hopper
-// (see hopper entity for this value)
+use crate::config::GAME_CONFIGURATION;
 
 /// A system that manages whether the rooftop is
 /// available for collision or not.
@@ -46,7 +44,7 @@ impl <'a> System<'a> for RooftopColliderManagementSystem {
         // Update the rooftop component
         for (rooftop_component, rooftop_transform, collision_shape) in (&mut rooftop_components, &transforms, &mut collision_shapes).join() {
             //+log::info!("  rooftop is {:?} ({:?})", rooftop_transform.translation().y, rooftop_transform.translation().y + HOPPER_POSITION_LEEWAY);
-            if hopper_position > rooftop_transform.translation().y + HOPPER_POSITION_LEEWAY {
+            if hopper_position > rooftop_transform.translation().y + GAME_CONFIGURATION.hopper_position_leeway {
                 rooftop_component.is_collision_enabled = true;
             }
             //+log::info!("  rooftop collision enabled = {:?}", rooftop_component.is_collision_enabled);

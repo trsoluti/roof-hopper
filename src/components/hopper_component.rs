@@ -1,11 +1,7 @@
 //! Hopper component and associated data
 
 use amethyst::core::ecs::{Component, DenseVecStorage};
-
-/// How hard to jump when the jump button pressed
-const JUMP_FORCE: f32 = 5_200.;
-/// How much to force left/right when the appropriate button pressed
-const SIDEWAYS_FORCE: f32 = 80.;
+use crate::config::GAME_CONFIGURATION;
 
 /// The possible states of our hopper
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
@@ -82,10 +78,10 @@ impl HopperComponent {
     pub fn can_nudge(&self) -> bool { self.hopper_state.can_nudge() }
     /// Starts the jump sequence
     #[inline]
-    pub fn start_jump(&mut self) { self.jump_force = JUMP_FORCE }
+    pub fn start_jump(&mut self) { self.jump_force = GAME_CONFIGURATION.jump_force }
     /// Starts the nudge sequence
     pub fn start_nudge(&mut self, move_left: bool) {
-        self.nudge_force = SIDEWAYS_FORCE * if move_left { -1. } else { 1. }
+        self.nudge_force = GAME_CONFIGURATION.sideways_force * if move_left { -1. } else { 1. }
     }
 }
 

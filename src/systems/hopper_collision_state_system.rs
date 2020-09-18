@@ -7,8 +7,8 @@ use amethyst::derive::SystemDesc;
 use amethyst::core::ecs::{System, ReadExpect, ReadStorage, WriteStorage, SystemData};
 use crate::components::{CollisionComponent, HopperComponent, HopperState};
 use crate::resources::PlayerEntityResource;
+use crate::config::GAME_CONFIGURATION;
 
-const DEBOUNCING_FRAME_COUNT: u32 = 5;
 
 /// A system that "debounces" a collision between the hopper
 /// and a rooftop
@@ -46,7 +46,9 @@ impl<'a> System<'a> for HopperCollisionStateSystem {
             HopperState::Rising
         } else if in_collision {
             match hopper_component.hopper_state {
-                HopperState::Rising | HopperState::Peaking | HopperState::Falling => HopperState::Bouncing(DEBOUNCING_FRAME_COUNT),
+                HopperState::Rising | HopperState::Peaking | HopperState::Falling => HopperState::Bouncing(
+                    GAME_CONFIGURATION.debouncing_frame_count
+                ),
                 HopperState::Bouncing(frames_left) => if frames_left > 1 {
                     HopperState::Bouncing(frames_left - 1)
                 } else {
@@ -59,7 +61,7 @@ impl<'a> System<'a> for HopperCollisionStateSystem {
                 HopperState::Rising => HopperState::Rising,
                 HopperState::Peaking => HopperState::Peaking,
                 HopperState::Falling => HopperState::Falling,
-                HopperState::Bouncing(frames_left) => if frames_left > DEBOUNCING_FRAME_COUNT * 2 {
+                HopperState::Bouncing(frames_left) => if frames_left > GAME_CONFIGURATION.debouncing_frame_count * 2 {
                     HopperState::Rising
                 } else {
                     HopperState::Bouncing(frames_left + 1)

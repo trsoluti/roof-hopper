@@ -6,8 +6,7 @@ use amethyst::core::ecs::{System, WriteStorage, Join, SystemData, ReadStorage};
 use crate::components::{HopperComponent, HopperState};
 use amethyst_rhusics::rhusics_core::physics2d::Velocity2;
 use amethyst_rhusics::rhusics_core::NextFrame;
-
-const PEAKING_THRESHOLD: f32 = 1.2;
+use crate::config::GAME_CONFIGURATION;
 
 /// A system that syncs the three soaring states, Rising, Peaking and Falling,
 /// to the hopper's velocity.
@@ -37,9 +36,9 @@ impl<'a> System<'a> for HopperSoaringSystem {
             // velocity only affects the soaring states
             if hopper_component.is_soaring() {
                 let upward_velocity = next_frame_velocity.value.linear().y;
-                hopper_component.hopper_state = if upward_velocity > PEAKING_THRESHOLD {
+                hopper_component.hopper_state = if upward_velocity > GAME_CONFIGURATION.peaking_threshold {
                     HopperState::Rising
-                } else if upward_velocity < - PEAKING_THRESHOLD {
+                } else if upward_velocity < -GAME_CONFIGURATION.peaking_threshold {
                     HopperState::Falling
                 } else {
                     HopperState::Peaking
